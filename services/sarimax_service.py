@@ -25,6 +25,10 @@ class SARIMAXForecaster:
         df = df.sort_values(date_col)
         self.family = family_val
 
+                # --- Filter out missing or zero labels ---
+        df = df[df[target_col].notnull()]
+        df = df[df[target_col] != 0]
+
         # Aggregate daily
         ts_data = (
             df

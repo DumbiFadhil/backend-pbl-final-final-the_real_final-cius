@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from services.sarimax_service import SarimaxService
 # from services.xgboost_service import XGBoostService
 # from services.nlp_service import NLPService
+from utils import safe_filename
 
 app = Flask(__name__)
 # CORS(app)
@@ -25,7 +26,7 @@ def train_sarimax():
 def predict_sarimax():
     # Expects JSON: { "family_val": "FAMILYNAME", "steps": 30 }
     data = request.get_json()
-    family_val = data.get('family_val')
+    family_val = safe_filename(data.get('family_val'))
     steps = data.get('steps', 30)
     if not family_val:
         return jsonify({'error': 'family_val is required'}), 400

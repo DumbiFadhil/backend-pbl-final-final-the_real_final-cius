@@ -5,6 +5,7 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX, SARIMAXResults
 from pmdarima import auto_arima
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from flask import current_app
+from utils import safe_filename
 
 class SARIMAXForecaster:
     def __init__(self, model_dir='models'):
@@ -91,9 +92,9 @@ class SarimaxService:
             return {'error': 'No valid CSV file uploaded.'}
 
         date_col = form.get('date_col', 'date')
-        family_col = form.get('family_col', 'family')
+        family_col = safe_filename(form.get('family_col', 'family'))
         target_col = form.get('target_col', 'sales')
-        family_val = form.get('family_val', None)
+        family_val = safe_filename(form.get('family_val', None))
 
         df = pd.read_csv(file_storage)
 
